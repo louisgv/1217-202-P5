@@ -12,16 +12,12 @@ using UnityEngine;
 /// It also explode upon destroyed
 /// Author: LAB
 /// </summary>
-[RequireComponent (typeof(C))]
-abstract public class SmartBoundedVehicle <V, C, S, O>: BoundedVehicle 
-	where V: Vehicle // it's acyclic so it's fine
+abstract public class SmartVehicle <V, C, S, O>: ObstacleAvoidingVehicle <O, C> 
+	where V : Vehicle // it's acyclic so it's fine
 	where C : CustomBoxCollider
 	where S : SpawningSystem<V>  // Wow, dangerous teritory here
 	where O : ObstacleSystem
 {
-	// This param includes the safe distance
-	[SerializeField]
-	public SteeringParams avoidingParams;
 
 	[SerializeField]
 	private GameObject explosionPrefab;
@@ -32,28 +28,7 @@ abstract public class SmartBoundedVehicle <V, C, S, O>: BoundedVehicle
 	/// <value>The parent system.</value>
 	public S ParentSystem { get; set; }
 
-	/// <summary>
-	/// Gets or sets the target obstacle system.
-	/// </summary>
-	/// <value>The target obstacle system.</value>
-	public O TargetObstacleSystem { get; set; }
-
-	/// <summary>
-	/// Gets or sets the collider instance.
-	/// </summary>
-	/// <value>The collider instance.</value>
-	public C ColliderInstance { get ; set ; }
-
 	private float maxPredictionTimeSquared = 9f;
-
-	#region Unity Lifecycle
-
-	protected override void Awake ()
-	{
-		ColliderInstance = GetComponent <C> ();
-	}
-
-	#endregion
 
 	/// <summary>
 	/// Explode this instance.
@@ -69,38 +44,6 @@ abstract public class SmartBoundedVehicle <V, C, S, O>: BoundedVehicle
 		base.Reset ();
 
 		ParentSystem.RenewVehicle (this as V);
-	}
-
-	/// <summary>
-	/// Gets the total obstacle avoidance force.
-	/// </summary>
-	/// <returns>The total obstacle avoidance force.</returns>
-	protected Vector3 GetTotalObstacleAvoidanceForce ()
-	{
-		var mostThreateningObstacle = TargetObstacleSystem.FindNearestInstance (this, avoidingParams.ThresholdSquared, 2);
-
-		if (mostThreateningObstacle == null) {
-			return Vector3.zero;
-		}
-
-		var obstacleCollider = mostThreateningObstacle.GetComponent <CustomBoxCollider> ();
-
-		float radiDistance = ColliderInstance.GetAverageXZLength () + obstacleCollider.GetAverageXZLength ();
-
-		float halfFutureDistance = Velocity.sqrMagnitude / MaxSpeedSquared / 2;
-
-		var halfFutureDiff = transform.forward * halfFutureDistance;
-
-		// Front radar ahead of the vehicle
-		var frontRadar = mostThreateningObstacle.position - transform.position;
-
-		var halfFutureRadar = frontRadar - halfFutureDiff;
-
-		var futureRadar = frontRadar - halfFutureDiff;
-
-		return SteeringForce.GetAvoidanceForce (this, frontRadar, radiDistance) +
-		SteeringForce.GetAvoidanceForce (this, futureRadar, radiDistance) +
-		SteeringForce.GetAvoidanceForce (this, halfFutureRadar, radiDistance);
 	}
 
 	/// <summary>

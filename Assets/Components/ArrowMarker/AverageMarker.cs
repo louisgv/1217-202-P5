@@ -11,8 +11,6 @@ using UnityEngine;
 /// </summary>
 public class AverageMarker : Vehicle
 {
-	public Material glLineMaterial;
-
 	/// <summary>
 	/// Gets or sets the marker position.
 	/// </summary>
@@ -56,19 +54,4 @@ public class AverageMarker : Vehicle
 	{
 		transform.position = newPos;
 	}
-
-	/// <summary>
-	/// Raises the render object event.
-	/// </summary>
-	protected override void OnRenderObject ()
-	{
-		glLineMaterial.SetPass (0);
-
-		GL.PushMatrix ();
-
-		base.OnRenderObject ();
-
-		GL.PopMatrix ();
-	}
-
 }

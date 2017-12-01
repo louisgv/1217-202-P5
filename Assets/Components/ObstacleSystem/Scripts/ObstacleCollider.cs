@@ -10,5 +10,5 @@ using UnityEngine;
 /// </summary>
 public class ObstacleCollider : CustomBoxCollider
 {
-	
+
 }

@@ -5,12 +5,15 @@ using System;
 
 /// <summary>
 /// Vehicle base class.
+/// Extended from grid component for optimizing neighbor search
 /// Author LAB
 /// Attached to: N/A
 /// </summary>
 public abstract class Vehicle : SpawningGridComponent
 {
 	public static bool debugLine = true;
+
+	public Material glLineMaterial;
 	
 	[SerializeField]
 	private float mass = 1.0f;
@@ -57,6 +60,8 @@ public abstract class Vehicle : SpawningGridComponent
 		}
 	}
 
+	protected Vector3 totalForce;
+
 	private Vector3 acceleration;
 
 	[SerializeField]
@@ -67,6 +72,9 @@ public abstract class Vehicle : SpawningGridComponent
 
 	[SerializeField]
 	public SteeringParams wanderingParams;
+
+	[SerializeField]
+	public SteeringParams boundingParams;
 
 	private float wanderAngle = 0;
 
@@ -106,6 +114,15 @@ public abstract class Vehicle : SpawningGridComponent
 	/// Gets the steering force.
 	/// </summary>
 	protected abstract Vector3 GetTotalSteeringForce ();
+
+	/// <summary>
+	/// Gets the area bounding force.
+	/// </summary>
+	/// <returns>The bounding force.</returns>
+	protected Vector3 GetBoundingForce ()
+	{
+		return SteeringForce.GetBoundingForce (this, BoundingPlane);
+	}
 
 	/// <summary>
 	/// Applies ann add-on acceleration.
@@ -234,13 +251,27 @@ public abstract class Vehicle : SpawningGridComponent
 	}
 
 	/// <summary>
-	/// Raises the render object event.
+	/// Raises the render object extended event.
 	/// </summary>
-	protected virtual void OnRenderObject ()
+	protected virtual void DrawDebugLines ()
 	{
 		DrawDebugLine (transform.position + transform.right * 3.0f, Color.blue);
-
+		
 		DrawDebugLine (transform.position + transform.forward * 3.0f, Color.green);
+	}
+
+	/// <summary>
+	/// Raises the render object event.
+	/// </summary>
+	protected void OnRenderObject ()
+	{
+		glLineMaterial.SetPass (0);
+
+		GL.PushMatrix ();
+
+		DrawDebugLines ();
+
+		GL.PopMatrix ();
 	}
 
 }
