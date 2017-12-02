@@ -68,6 +68,17 @@ public abstract class SpawningSystem <T>: MonoBehaviour
 	}
 
 	/// <summary>
+	/// Batch spawn entity.
+	/// </summary>
+	/// <param name="count">Count.</param>
+	public void SpawnEntities (int count)
+	{
+		for (int i = 0; i < count; i++) {
+			SpawnEntity ();
+		}
+	}
+
+	/// <summary>
 	/// Spawns an entity.
 	/// </summary>
 	protected virtual void SpawnEntity ()
@@ -103,22 +114,6 @@ public abstract class SpawningSystem <T>: MonoBehaviour
 			SpawnEntity ();
 		}
 	}
-
-	protected virtual void Awake ()
-	{
-		InstanceMap = new Dictionary<SpawningGridCoordinate, HashSet<T>> ();
-
-		ColliderInstanceMap = new Dictionary<SpawningGridCoordinate, HashSet<CustomBoxCollider>> ();
-
-		prefabCollider = prefab.GetComponent <CustomBoxCollider> ();
-
-		var planeSize = plane.Size;
-
-		gridSize = Mathf.Max (planeSize.x, planeSize.z) / gridResolution;
-
-		SpawnEntities ();
-	}
-
 
 	/// <summary>
 	/// Add the specified instance.
@@ -185,6 +180,21 @@ public abstract class SpawningSystem <T>: MonoBehaviour
 	}
 
 	#region Unity Lifecycle
+
+	protected virtual void Awake ()
+	{
+		InstanceMap = new Dictionary<SpawningGridCoordinate, HashSet<T>> ();
+
+		ColliderInstanceMap = new Dictionary<SpawningGridCoordinate, HashSet<CustomBoxCollider>> ();
+
+		prefabCollider = prefab.GetComponent <CustomBoxCollider> ();
+
+		var planeSize = plane.Size;
+
+		gridSize = Mathf.Max (planeSize.x, planeSize.z) / gridResolution;
+
+		SpawnEntities ();
+	}
 
 	protected virtual void Start ()
 	{

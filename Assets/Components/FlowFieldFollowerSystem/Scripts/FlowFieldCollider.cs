@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlowFieldCollider : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
+/// <summary>
+/// Flow field collider.
+/// Implement flow field specific feature
+/// Author: LAB
+/// Attached to: FlowFieldFollower
+/// </summary>
+public class FlowFieldCollider : CustomBoxCollider
+{
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

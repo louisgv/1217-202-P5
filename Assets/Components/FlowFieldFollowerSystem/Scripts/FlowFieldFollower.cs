@@ -8,18 +8,24 @@ using UnityEngine;
 /// Author: LAB
 /// Attached to: FlowFieldFollower
 /// </summary>
-public class FlowFieldFollower : MonoBehaviour
+public class FlowFieldFollower : AgileVehicle<FlowFieldFollower, FlowFieldFollowerSystem>
 {
+	#region implemented abstract members of Vehicle
 
-	// Use this for initialization
-	void Start ()
+	protected override Vector3 GetTotalSteeringForce ()
 	{
-		
+		totalForce = Vector3.zero;
+
+		totalForce += SteeringForce.GetWanderingForce (this) * wanderingParams.ForceScale;
+
+		totalForce += SteeringForce.GetBoundingForce (this, BoundingPlane) * boundingParams.ForceScale;
+
+		totalForce.y = 0;
+
+		return Vector3.ClampMagnitude (totalForce, maxForce);
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		
-	}
+
+	#endregion
+
+
 }

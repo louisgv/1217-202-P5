@@ -9,7 +9,7 @@ using UnityEngine;
 /// Author: LAB
 /// Attached to: FlockerSystem
 /// </summary>
-public class FlockerSystem : SpawningSystem <Flocker>
+public class FlockerSystem : VehicleSpawningSystem <Flocker>
 {
 	[SerializeField]
 	private ObstacleSystem targetObstacleSystem;
@@ -18,42 +18,7 @@ public class FlockerSystem : SpawningSystem <Flocker>
 	private Transform seekingTarget;
 
 	[SerializeField]
-	private AverageMarker averagePositionMarker;
-
-	private Vector3 averagePosition;
-
-	private Vector3 averageVelocity;
-
-	private int localFlockGroupCount;
-
-	/// <summary>
-	/// Gets the instance map.
-	/// </summary>
-	/// <value>The instance map.</value>
-	public Dictionary <SpawningGridCoordinate, Vector3> FlockAverageVelocityMap {
-		get;
-		private set;
-	}
-
-	/// <summary>
-	/// Gets the flock average position map.
-	/// </summary>
-	/// <value>The flock average position map.</value>
-	public Dictionary <SpawningGridCoordinate, Vector3> FlockAveragePositionMap {
-		get;
-		private set;
-	}
-
-	/// <summary>
-	/// Batch spawn entity.
-	/// </summary>
-	/// <param name="count">Count.</param>
-	public void SpawnEntities (int count)
-	{
-		for (int i = 0; i < count; i++) {
-			SpawnEntity ();
-		}
-	}
+	private Transform averagePositionMarker;
 
 	#region implemented abstract members of SpawningSystem
 
@@ -79,60 +44,13 @@ public class FlockerSystem : SpawningSystem <Flocker>
 	#endregion
 
 	/// <summary>
-	/// Refreshs the flocker average position map.
+	/// Update marker's location and velocity
 	/// </summary>
-	private void RefreshFlockAverageDataMap ()
+	override protected void OnAverageDataRefreshed ()
 	{
-		averagePosition = Vector3.zero;
-		localFlockGroupCount = 0;
+		averagePositionMarker.position = averagePosition;
 
-		foreach (var item in InstanceMap) {
-			var instanceSet = item.Value;
-
-			if (instanceSet == null || instanceSet.Count == 0) {
-				FlockAverageVelocityMap [item.Key] = Vector3.zero;
-				FlockAveragePositionMap [item.Key] = Vector3.zero;
-				continue;
-			}
-
-			float maxSpeed = 0;
-	
-			var positionSum = Vector3.zero;
-			var velocitySum = Vector3.zero;
-
-
-			foreach (var instance in instanceSet) {
-				if (maxSpeed < instance.MaxSteeringSpeed) {
-					maxSpeed = instance.MaxSteeringSpeed;
-				}
-
-				positionSum += instance.transform.position;
-				velocitySum += instance.Velocity;
-			}
-
-			var avgVelocity = velocitySum / (float)instanceSet.Count;
-
-			FlockAverageVelocityMap [item.Key] = avgVelocity.normalized * maxSpeed;
-			FlockAveragePositionMap [item.Key] = positionSum / (float)instanceSet.Count;
-
-			averageVelocity += FlockAverageVelocityMap [item.Key];
-			averagePosition += FlockAveragePositionMap [item.Key];
-			localFlockGroupCount += 1;
-		}
-
-		averagePosition /= (float)localFlockGroupCount;
-		averageVelocity /= (float)localFlockGroupCount;
-
-		averagePositionMarker.SetVelocity (averageVelocity);
-
-		averagePositionMarker.MarkerPosition = averagePosition;
-	}
-
-	protected override void Awake ()
-	{
-		base.Awake ();
-		FlockAverageVelocityMap = new Dictionary<SpawningGridCoordinate, Vector3> ();
-		FlockAveragePositionMap = new Dictionary<SpawningGridCoordinate, Vector3> ();
+		averagePositionMarker.forward = averageVelocity.normalized;
 	}
 
 	protected override void Update ()

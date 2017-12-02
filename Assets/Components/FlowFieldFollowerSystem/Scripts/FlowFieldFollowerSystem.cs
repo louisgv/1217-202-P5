@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlowFieldFollowerSystem : MonoBehaviour
+/// <summary>
+/// Flow field follower.
+/// It construct the vector field, leveraging the grid we already implemented
+/// Author: LAB
+/// Attached to: FlowFieldFollowerSystem
+/// </summary>
+public class FlowFieldFollowerSystem : VehicleSpawningSystem<FlowFieldFollower>
 {
+	#region implemented abstract members of SpawningSystem
 
-	// Use this for initialization
-	void Start ()
+	public override void SpawnEntity (Vector3 pos)
 	{
-		
+		throw new System.NotImplementedException ();
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		
-	}
+
+	#endregion
+
 }

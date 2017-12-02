@@ -9,9 +9,13 @@ using System;
 /// defined by its parent system
 /// Author: LAB
 /// </summary>
-abstract public class FieldFlowingVehicle <V, S>: AgileVehicle<V, S>
+abstract public class FieldFlowingVehicle <V, S>: FlockingVehicle<V, S> 
 	where V : Vehicle
 	where S : SpawningSystem <V>
 {
-	
+
+	[SerializeField]
+	public SteeringParams flowfieldParams;
+
+
 }
