@@ -42,6 +42,15 @@ public class SpawningGridCoordinate
 	/// <value>The z.</value>
 	public int Z { get; private set; }
 
+	/// Casting to V3 operator
+	/// <param name="c">C.</param>
+	public static implicit operator Vector3 (SpawningGridCoordinate c)
+	{	
+		return c != null
+			? new Vector3 (c.X, 0, c.Z)
+			: Vector3.zero;
+	}
+
 	/// <summary>
 	/// Gets the width of the grid.
 	/// </summary>

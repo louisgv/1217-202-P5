@@ -49,4 +49,21 @@ public abstract class SpawningGridComponent : MonoBehaviour
 				? updatedGrid 
 				: null;
 	}
+
+	/// <summary>
+	/// Raises the draw gizmos event.
+	/// </summary>
+	protected virtual void OnDrawGizmos ()
+	{
+		//TODO: Comment these out in prod
+
+		Gizmos.color = Color.black;
+
+		if (GridCoordinate != null) {
+			Gizmos.DrawWireCube (
+				BoundingPlane.WorldCenter +
+				(Vector3)GridCoordinate * GridCoordinate.GridSize, 
+				Vector3.one * GridCoordinate.GridSize);
+		}
+	}
 }

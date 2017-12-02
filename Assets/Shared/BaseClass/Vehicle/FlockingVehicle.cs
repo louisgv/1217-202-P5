@@ -12,7 +12,7 @@ using UnityEngine;
 /// </summary>
 abstract public class FlockingVehicle <V, S> : AgileVehicle <V, S>
 	where V : Vehicle
-	where S : SpawningSystem <V>
+	where S : VehicleSpawningSystem <V>
 {
 	// This param includes the safe distance
 	[SerializeField]

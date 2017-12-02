@@ -63,6 +63,8 @@ abstract public class VehicleSpawningSystem <V>: SpawningSystem <V>
 	protected void RefreshFlockAverageDataMap ()
 	{
 		averagePosition = Vector3.zero;
+		averageVelocity = Vector3.zero;
+
 		localFlockGroupCount = 0;
 
 		foreach (var item in InstanceMap) {
@@ -99,8 +101,13 @@ abstract public class VehicleSpawningSystem <V>: SpawningSystem <V>
 			localFlockGroupCount += 1;
 		}
 
-		averagePosition /= (float)localFlockGroupCount;
-		averageVelocity /= (float)localFlockGroupCount;
+		if (localFlockGroupCount > 0) {
+			averagePosition /= (float)localFlockGroupCount;
+			averageVelocity /= (float)localFlockGroupCount;
+		} else {
+			averagePosition = Vector3.zero;
+			averageVelocity = Vector3.forward;
+		}
 
 		OnAverageDataRefreshed ();
 	}

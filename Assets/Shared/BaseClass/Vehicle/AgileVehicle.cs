@@ -70,6 +70,9 @@ abstract public class AgileVehicle <V, S>: Vehicle
 	/// <returns>The total obstacle avoidance force.</returns>
 	protected Vector3 GetTotalObstacleAvoidanceForce ()
 	{
+		if (TargetObstacleSystem == null) {
+			return Vector3.zero;
+		}
 		var mostThreateningObstacle = TargetObstacleSystem.FindNearestInstance (this, avoidingParams.ThresholdSquared, 2);
 
 		if (mostThreateningObstacle == null) {

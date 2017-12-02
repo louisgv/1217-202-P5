@@ -123,7 +123,8 @@ public abstract class SpawningSystem <T>: MonoBehaviour
 	{
 		var localGridPos = instance.transform.position - plane.WorldCenter;
 
-		var gridCoord = new SpawningGridCoordinate (localGridPos, gridSize, gridResolution);
+		var gridCoord = new SpawningGridCoordinate (
+			                localGridPos, gridSize, gridResolution);
 
 		RegisterVehicle (gridCoord, instance);
 	}

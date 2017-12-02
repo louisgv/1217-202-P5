@@ -8,7 +8,7 @@ using UnityEngine;
 /// Author: LAB
 /// Attached to: FlowFieldFollower
 /// </summary>
-public class FlowFieldFollower : AgileVehicle<FlowFieldFollower, FlowFieldFollowerSystem>
+public class FlowFieldFollower : FieldFlowingVehicle<FlowFieldFollower, FlowFieldFollowerSystem>
 {
 	#region implemented abstract members of Vehicle
 
@@ -20,7 +20,9 @@ public class FlowFieldFollower : AgileVehicle<FlowFieldFollower, FlowFieldFollow
 	{
 		totalForce = Vector3.zero;
 
-		totalForce += SteeringForce.GetWanderingForce (this) * wanderingParams.ForceScale;
+		totalForce += GetTotalNeighborSeparationForce () * separationParams.ForceScale;
+
+		totalForce += GetFutureFieldForce () * flowFieldParams.ForceScale;
 
 		totalForce += SteeringForce.GetBoundingForce (this, BoundingPlane) * boundingParams.ForceScale;
 
