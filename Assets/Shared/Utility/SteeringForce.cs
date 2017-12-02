@@ -99,9 +99,9 @@ public static class SteeringForce
 	internal static Vector3 GetWanderingForce (Vehicle vehicle)
 	{
 		// Get a random rotation position
-		vehicle.WanderAngle += Random.Range (-1f, 1f) * vehicle.WanderRange;
+		vehicle.WanderAngle += new Vector2 (0, Random.Range (-1f, 1f) * vehicle.WanderRange);
 
-		var wanderCircle = (vehicle.transform.forward + UnitRotation (vehicle.WanderAngle));
+		var wanderCircle = (vehicle.transform.forward + UnitRotationY (vehicle.WanderAngle.y));
 
 		// Reconstruct the target position
 		var finalTarget = vehicle.transform.position +
@@ -113,14 +113,47 @@ public static class SteeringForce
 	}
 
 	/// <summary>
+	/// Gets the wandering force in 3 dimensions.
+	/// </summary>
+	/// <returns>The wandering force.</returns>
+	/// <param name="target">Target.</param>
+	internal static Vector3 GetWanderingForce3D (Vehicle vehicle)
+	{
+		vehicle.WanderAngle += new Vector2 (Random.Range (-1f, 1f), Random.Range (-1f, 1f)) * vehicle.WanderRange;
+
+		var wanderSphere = vehicle.transform.forward +
+		                   UnitRotationY (vehicle.WanderAngle.y) +
+		                   UnitRotationX (vehicle.WanderAngle.x);
+
+		// Reconstruct the target position
+		var finalTarget = vehicle.transform.position +
+		                  wanderSphere * vehicle.wanderingParams.ThresholdSquared;
+
+		//	Debug.DrawLine (vehicle.transform.position, finalTarget, Color.black);
+
+		return GetSeekingForce (vehicle, finalTarget);
+	}
+
+	/// <summary>
 	/// An unit vector describing rotation at the specified angle.
 	/// </summary>
 	/// <returns>The rotation.</returns>
 	/// <param name="angle">Angle.</param>
-	internal static Vector3 UnitRotation (float angle)
+	internal static Vector3 UnitRotationY (float angle)
 	{
 		return new Vector3 (Mathf.Cos (angle), 0, Mathf.Sin (angle));
 	}
+
+	/// <summary>
+	/// An unit vector describing rotation at the specified angle.
+	/// </summary>
+	/// <returns>The rotation.</returns>
+	/// <param name="angle">Angle.</param>
+	internal static Vector3 UnitRotationX (float angle)
+	{
+		return new Vector3 (0, Mathf.Cos (angle), Mathf.Sin (angle));
+	}
+
 
 	/// <summary>
 	/// Gets the bounding force.
@@ -148,6 +181,50 @@ public static class SteeringForce
 			desiredVelocity = new Vector3 (vehicle.Velocity.x, 0, -maxSteeringSpeed);
 		} else if (vehicleZ < minBound.z) {
 			desiredVelocity = new Vector3 (vehicle.Velocity.x, 0, maxSteeringSpeed);
+		}
+
+		if (desiredVelocity.Equals (Vector3.zero)) {
+			return Vector3.zero;
+		}
+
+		desiredVelocity = desiredVelocity.normalized * maxSteeringSpeed;
+
+		return GetSteeringForce (vehicle, desiredVelocity);
+	}
+
+	/// <summary>
+	/// Gets the bounding force in 3D.
+	/// </summary>
+	/// <returns>The bounding force.</returns>
+	internal static Vector3 GetBoundingForce3D (Vehicle vehicle, CustomBoxCollider boundingPlane)
+	{
+		var minBound = boundingPlane.GetMinBound ();
+		var maxBound = boundingPlane.GetMaxBound ();
+
+		Vector3 desiredVelocity = Vector3.zero;
+
+		float vehicleX = vehicle.transform.position.x;
+		float vehicleY = vehicle.transform.position.y;
+		float vehicleZ = vehicle.transform.position.z;
+
+		float maxSteeringSpeed = vehicle.MaxSteeringSpeed;
+
+		if (vehicleX > maxBound.x) {
+			desiredVelocity = new Vector3 (-maxSteeringSpeed, vehicle.Velocity.y, vehicle.Velocity.z);
+		} else if (vehicleX < minBound.x) {
+			desiredVelocity = new Vector3 (maxSteeringSpeed, vehicle.Velocity.y, vehicle.Velocity.z);
+		}
+
+		if (vehicleY > maxBound.y) {
+			desiredVelocity = new Vector3 (vehicle.Velocity.x, -maxSteeringSpeed, vehicle.Velocity.z);
+		} else if (vehicleY < minBound.y) {
+			desiredVelocity = new Vector3 (vehicle.Velocity.x, maxSteeringSpeed, vehicle.Velocity.z);
+		}
+
+		if (vehicleZ > maxBound.z) {
+			desiredVelocity = new Vector3 (vehicle.Velocity.x, vehicle.Velocity.y, -maxSteeringSpeed);
+		} else if (vehicleZ < minBound.z) {
+			desiredVelocity = new Vector3 (vehicle.Velocity.x, vehicle.Velocity.y, maxSteeringSpeed);
 		}
 
 		if (desiredVelocity.Equals (Vector3.zero)) {

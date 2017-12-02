@@ -137,10 +137,6 @@ public class FlockerSystem : SpawningSystem <Flocker>
 
 	protected override void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.D)) {
-			Vehicle.debugLine = !Vehicle.debugLine;
-		}
-
 		base.Update ();
 		RefreshFlockAverageDataMap ();
 	}

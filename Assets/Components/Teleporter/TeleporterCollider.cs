@@ -24,6 +24,8 @@ public class TeleporterCollider : CustomBoxCollider
 
 	private float timeout;
 
+	public bool isTeleporting;
+
 	/// <summary>
 	/// Teleport this instance to a random position on the plane.
 	/// </summary>
@@ -64,6 +66,9 @@ public class TeleporterCollider : CustomBoxCollider
 	{
 		base.Update ();
 
+		if (!isTeleporting) {
+			return;
+		}
 		var nearbyTargets = targetSystem.FindCloseProximityInstances (teleporterInstance, 1);
 
 		foreach (var target in nearbyTargets) {

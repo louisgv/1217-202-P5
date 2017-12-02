@@ -10,8 +10,7 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-
-	public List<GameObject> cameraPrefabs;
+	public List<SmoothFollow> cameraPrefabs;
 
 	private List<GameObject> cameras;
 
@@ -33,7 +32,11 @@ public class CameraManager : MonoBehaviour
 		currentCameraIndex = 0;
 
 		foreach (var cameraPrefab in cameraPrefabs) {
-			var cameraInstance = Instantiate (cameraPrefab, transform);
+			if (GameObject.FindGameObjectWithTag (cameraPrefab.targetTag) == null) {
+				continue;
+			}
+
+			var cameraInstance = Instantiate (cameraPrefab, transform).gameObject;
 
 			cameraInstance.SetActive (false);
 
@@ -117,17 +120,4 @@ public class CameraManager : MonoBehaviour
 			SwapNextCamera ();
 		}
 	}
-
-	/// <summary>
-	/// Showing camera cycling instruction and the current camera name
-	/// </summary>
-	private void OnGUI ()
-	{
-		GUI.skin.box.wordWrap = true;
-
-		GUI.Box (new Rect (0, 10, 180, 54), "Current Camera:\n" + cameras [currentCameraIndex].name + ".");
-
-		GUI.Box (new Rect (Screen.width - 190, 10, 180, 36), "Press the 'c' key to switch camera.");
-	}
-
 }

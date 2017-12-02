@@ -9,7 +9,7 @@ using UnityEngine;
 /// Author: LAB
 /// Attached to: Flocker
 /// </summary>
-public class Flocker : FlockingVehicle <Flocker, FlockerCollider, FlockerSystem, ObstacleSystem>
+public class Flocker : FlockingVehicle <Flocker, FlockerSystem>
 {
 
 	/// <summary>
@@ -38,7 +38,7 @@ public class Flocker : FlockingVehicle <Flocker, FlockerCollider, FlockerSystem,
 
 		totalForce += GetTotalNeighborCohesionForce (ParentSystem.FlockAveragePositionMap [GridCoordinate]) * cohesionParams.ForceScale;
 
-		totalForce += GetBoundingForce () * boundingParams.ForceScale;
+		totalForce += SteeringForce.GetBoundingForce3D (this, BoundingPlane) * boundingParams.ForceScale;
 
 //		totalForce.y = 0;
 

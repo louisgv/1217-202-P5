@@ -76,13 +76,13 @@ public abstract class Vehicle : SpawningGridComponent
 	[SerializeField]
 	public SteeringParams boundingParams;
 
-	private float wanderAngle = 0;
+	private Vector2 wanderAngle = Vector2.zero;
 
 	/// <summary>
 	/// Gets the wander angle.
 	/// </summary>
 	/// <value>The wander angle.</value>
-	public float WanderAngle { get { return wanderAngle; } set { wanderAngle = value; } }
+	public Vector2 WanderAngle { get { return wanderAngle; } set { wanderAngle = value; } }
 
 	private float wanderRange = 0.333f;
 
@@ -114,15 +114,6 @@ public abstract class Vehicle : SpawningGridComponent
 	/// Gets the steering force.
 	/// </summary>
 	protected abstract Vector3 GetTotalSteeringForce ();
-
-	/// <summary>
-	/// Gets the area bounding force.
-	/// </summary>
-	/// <returns>The bounding force.</returns>
-	protected Vector3 GetBoundingForce ()
-	{
-		return SteeringForce.GetBoundingForce (this, BoundingPlane);
-	}
 
 	/// <summary>
 	/// Applies ann add-on acceleration.

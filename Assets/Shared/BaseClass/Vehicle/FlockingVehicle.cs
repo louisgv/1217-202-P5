@@ -7,13 +7,12 @@ using UnityEngine;
 /// Flocking vehicle.
 /// It is a smart vehicle that also know how to move together with
 /// its flock mate in the same spawning system
+/// It's a boid
 /// Author: LAB
 /// </summary>
-abstract public class FlockingVehicle  <V, C, S, O>: SmartVehicle <V,C,S,O> 
-	where V : Vehicle // it's acyclic so it's fine
-	where C : CustomBoxCollider
-	where S : SpawningSystem<V>  // Wow, dangerous teritory here
-	where O : ObstacleSystem
+abstract public class FlockingVehicle <V, S> : AgileVehicle <V, S>
+	where V : Vehicle
+	where S : SpawningSystem <V>
 {
 	// This param includes the safe distance
 	[SerializeField]

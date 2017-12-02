@@ -3,21 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Obstacle avoidance vehicle.
+/// Agile vehicle.
 /// It is aware of the obstacle system it should avoid
-/// It also explode upon destroyed
+/// It is also  aware of the parent system it belongs to
+/// and would report to the parent system after each frame
+/// Can be optimized to only report after certain amoun of time
 /// Author: LAB
 /// </summary>
-[RequireComponent (typeof(C))]
-abstract public class ObstacleAvoidingVehicle <O, C> : Vehicle
-	where O : ObstacleSystem
-	where C : CustomBoxCollider
+[RequireComponent (typeof(CustomBoxCollider))]
+abstract public class AgileVehicle <V, S>: Vehicle
+	where V : Vehicle
+	where S : SpawningSystem <V>
 {
 	/// <summary>
 	/// Gets or sets the collider instance.
 	/// </summary>
 	/// <value>The collider instance.</value>
-	public C ColliderInstance { get ; set ; }
+	public CustomBoxCollider ColliderInstance { get ; set ; }
+
+	/// <summary>
+	/// Gets or sets the parent system.
+	/// </summary>
+	/// <value>The parent system.</value>
+	public S ParentSystem { get; set; }
+
+	[SerializeField]
+	private ObstacleSystem targetObstacleSystem;
 
 	// This param includes the safe distance
 	[SerializeField]
@@ -27,13 +38,28 @@ abstract public class ObstacleAvoidingVehicle <O, C> : Vehicle
 	/// Gets or sets the target obstacle system.
 	/// </summary>
 	/// <value>The target obstacle system.</value>
-	public O TargetObstacleSystem { get; set; }
+	public ObstacleSystem TargetObstacleSystem {
+		get {
+			return targetObstacleSystem;
+		}
+		set {
+			targetObstacleSystem = value;
+		}
+	}
 
 	#region Unity Lifecycle
 
 	protected override void Awake ()
 	{
-		ColliderInstance = GetComponent <C> ();
+		ColliderInstance = GetComponent <CustomBoxCollider> ();
+	}
+
+	protected override void Reset ()
+	{
+		base.Reset ();
+		if (ParentSystem) {
+			ParentSystem.RenewVehicle (this as V);
+		}
 	}
 
 	#endregion

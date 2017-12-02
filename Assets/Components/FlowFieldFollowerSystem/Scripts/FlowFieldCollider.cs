@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlowField : MonoBehaviour {
+public class FlowFieldCollider : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
