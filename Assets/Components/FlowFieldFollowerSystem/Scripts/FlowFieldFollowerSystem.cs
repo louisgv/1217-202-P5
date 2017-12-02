@@ -10,13 +10,27 @@ using UnityEngine;
 /// </summary>
 public class FlowFieldFollowerSystem : VehicleSpawningSystem<FlowFieldFollower>
 {
+	/// <summary>
+	/// A dynamic cache of the flow field for the flow field vehicle
+	/// </summary>
+	/// <value>The instance map.</value>
+	public Dictionary <SpawningGridCoordinate, Vector3> FlowFieldMap {
+		get;
+		private set;
+	}
+
 	#region implemented abstract members of SpawningSystem
 
+	/// <summary>
+	/// Spawns an entity at the specified position.
+	/// </summary>
+	/// <param name="pos">Position.</param>
 	public override void SpawnEntity (Vector3 pos)
 	{
-		throw new System.NotImplementedException ();
+		
 	}
 
 	#endregion
+
 
 }

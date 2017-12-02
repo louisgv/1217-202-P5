@@ -4,7 +4,8 @@ using UnityEngine;
 
 /// <summary>
 /// Vehicle Spawning system.
-/// Tailored for spawning vehicle
+/// This spawning system can keep track of the average velocity and position
+/// of the vehicle it controlled
 /// Author: LAB
 /// Attached to: N/A
 /// </summary>
