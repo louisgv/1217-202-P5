@@ -71,9 +71,7 @@ abstract public class PathFollowingVehicle <V, S>: FlockingVehicle<V, S>
 		var pathDir = path.normalized;
 
 		// Project the future position on the path
-		var posOnPath = pathDir * Vector3.Dot (startToPos, pathDir);
-
-		return start + posOnPath;
+		return start + pathDir * Vector3.Dot (startToPos, pathDir);
 	}
 
 	/// <summary>
@@ -86,6 +84,8 @@ abstract public class PathFollowingVehicle <V, S>: FlockingVehicle<V, S>
 
 		Vector3 target = Vector3.zero;
 
+		Vector3 normalPoint = Vector3.zero;
+
 		float maxDistanceSquared = float.MaxValue;
 
 		// Find normal point
@@ -94,11 +94,11 @@ abstract public class PathFollowingVehicle <V, S>: FlockingVehicle<V, S>
 			var a = Nodes [i];
 			var b = Nodes [GetNextNodeIndexCyclic (i)];
 
-			var normalPoint = FindNormalPoint (futurePos, a.transform.position, b.transform.position);
+			normalPoint = FindNormalPoint (futurePos, 
+				a.transform.position, 
+				b.transform.position);
 
 			var dir = b - a;
-
-
 
 			if (normalPoint.x < PathNode.MinX (a, b) ||
 			    normalPoint.x > PathNode.MaxX (a, b) ||
@@ -107,7 +107,7 @@ abstract public class PathFollowingVehicle <V, S>: FlockingVehicle<V, S>
 
 				normalPoint = b.transform.position;
 
-				a = Nodes [GetNextNodeIndexCyclic (i)];
+				a = b;
 				b = Nodes [GetNextNodeIndexCyclic (i + 1)];
 
 				dir = b - a;
