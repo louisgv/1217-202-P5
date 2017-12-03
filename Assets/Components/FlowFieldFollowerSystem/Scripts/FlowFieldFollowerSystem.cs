@@ -104,6 +104,7 @@ public class FlowFieldFollowerSystem : VehicleSpawningSystem<FlowFieldFollower>
 	protected override void Update ()
 	{
 		base.Update ();
+		// Refresh just the velocity
 		RefreshFlockAverageVelocityMap ();
 	}
 }

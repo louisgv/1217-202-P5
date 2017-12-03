@@ -14,6 +14,10 @@ public enum SteeringMode
 /// <summary>
 /// Steering force static class.
 /// All force function assumed mass is 1 and force is applied every 1 second
+/// This class implement the most basic of steering.
+/// For steering behavior that's heavily dependent on its
+/// parent system (flocker, path follower, flow field follower),
+/// their force implementatioin is in their abstract class
 /// Author: LAB
 /// Attached to: N/A
 /// </summary>

@@ -13,6 +13,10 @@ public class PathFollower : PathFollowingVehicle<PathFollower, PathFollowerSyste
 
 	#region implemented abstract members of Vehicle
 
+	/// <summary>
+	/// Gets the steering force.
+	/// </summary>
+	/// <returns>The total steering force.</returns>
 	protected override Vector3 GetTotalSteeringForce ()
 	{
 		totalForce = Vector3.zero;
