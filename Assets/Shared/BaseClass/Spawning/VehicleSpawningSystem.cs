@@ -58,48 +58,87 @@ abstract public class VehicleSpawningSystem <V>: SpawningSystem <V>
 	}
 
 	/// <summary>
-	/// Refreshs the flocker average position map.
+	/// Refreshs the flock average velocity map.
 	/// </summary>
-	protected void RefreshFlockAverageDataMap ()
+	protected void RefreshFlockAverageVelocityMap (bool mutateCount = false)
 	{
-		averagePosition = Vector3.zero;
 		averageVelocity = Vector3.zero;
-
-		localFlockGroupCount = 0;
-
 		foreach (var item in InstanceMap) {
 			var instanceSet = item.Value;
 
 			if (instanceSet == null || instanceSet.Count == 0) {
 				FlockAverageVelocityMap [item.Key] = Vector3.zero;
-				FlockAveragePositionMap [item.Key] = Vector3.zero;
 				continue;
 			}
 
 			float maxSpeed = 0;
 
-			var positionSum = Vector3.zero;
 			var velocitySum = Vector3.zero;
-
 
 			foreach (var instance in instanceSet) {
 				if (maxSpeed < instance.MaxSteeringSpeed) {
 					maxSpeed = instance.MaxSteeringSpeed;
 				}
-
-				positionSum += instance.transform.position;
+					
 				velocitySum += instance.Velocity;
 			}
 
 			var avgVelocity = velocitySum / (float)instanceSet.Count;
 
 			FlockAverageVelocityMap [item.Key] = avgVelocity.normalized * maxSpeed;
-			FlockAveragePositionMap [item.Key] = positionSum / (float)instanceSet.Count;
 
 			averageVelocity += FlockAverageVelocityMap [item.Key];
-			averagePosition += FlockAveragePositionMap [item.Key];
-			localFlockGroupCount += 1;
+
+			if (mutateCount) {
+				localFlockGroupCount += 1;
+			}
 		}
+	}
+
+	/// <summary>
+	/// Refreshs the flock average position map.
+	/// </summary>
+	protected void RefreshFlockAveragePositionMap (bool mutateCount = false)
+	{
+		averagePosition = Vector3.zero;
+		foreach (var item in InstanceMap) {
+			var instanceSet = item.Value;
+
+			if (instanceSet == null || instanceSet.Count == 0) {
+				FlockAveragePositionMap [item.Key] = Vector3.zero;
+				continue;
+			}
+			var positionSum = Vector3.zero;
+
+			foreach (var instance in instanceSet) {
+				positionSum += instance.transform.position;
+			}
+
+			FlockAveragePositionMap [item.Key] = positionSum / (float)instanceSet.Count;
+
+			averagePosition += FlockAveragePositionMap [item.Key];
+
+			if (mutateCount) {
+				localFlockGroupCount += 1;
+			}
+		}
+	}
+
+
+	/// <summary>
+	/// Refreshs the flocker average position map.
+	/// </summary>
+	protected virtual void RefreshFlockAverageDataMap ()
+	{
+		localFlockGroupCount = 0;
+		RefreshFlockAverageVelocityMap (true);
+
+		// Exit prematurely since there's no flock group
+		if (localFlockGroupCount == 0) {
+			return;
+		}
+
+		RefreshFlockAveragePositionMap ();
 
 		if (localFlockGroupCount > 0) {
 			averagePosition /= (float)localFlockGroupCount;
@@ -111,5 +150,4 @@ abstract public class VehicleSpawningSystem <V>: SpawningSystem <V>
 
 		OnAverageDataRefreshed ();
 	}
-
 }

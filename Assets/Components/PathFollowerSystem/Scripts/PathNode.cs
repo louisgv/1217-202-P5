@@ -2,15 +2,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathNode : MonoBehaviour {
+/// <summary>
+/// Path node.
+/// </summary>
+public class PathNode : MonoBehaviour
+{
+	/// Overide the minus operator
+	/// <param name="a">The alpha component.</param>
+	/// <param name="b">The blue component.</param>
+	public static Vector3 operator - (PathNode a, PathNode b)
+	{
+		return a.transform.position - b.transform.position;
+	}
 
-	// Use this for initialization
-	void Start () {
-		
+	/// <summary>
+	/// Get the min X of 2 nodes
+	/// </summary>
+	/// <returns>The x.</returns>
+	/// <param name="a">The alpha component.</param>
+	/// <param name="b">The blue component.</param>
+	public static float MinX (PathNode a, PathNode b)
+	{
+		return Mathf.Min (a.transform.position.x, b.transform.position.x);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	/// <summary>
+	/// Get the max X of 2 nodes
+	/// </summary>
+	/// <returns>The x.</returns>
+	/// <param name="a">The alpha component.</param>
+	/// <param name="b">The blue component.</param>
+	public static float MaxX (PathNode a, PathNode b)
+	{
+		return Mathf.Max (a.transform.position.x, b.transform.position.x);
 	}
+
+	/// <summary>
+	/// Get the min Y of 2 nods
+	/// </summary>
+	/// <returns>The y.</returns>
+	/// <param name="a">The alpha component.</param>
+	/// <param name="b">The blue component.</param>
+	public static float MinY (PathNode a, PathNode b)
+	{
+		return Mathf.Min (a.transform.position.y, b.transform.position.y);
+	}
+
+	/// <summary>
+	/// Get the max y of 2 nods
+	/// </summary>
+	/// <returns>The y.</returns>
+	/// <param name="a">The alpha component.</param>
+	/// <param name="b">The blue component.</param>
+	public static float MaxY (PathNode a, PathNode b)
+	{
+		return Mathf.Max (a.transform.position.y, b.transform.position.y);
+	}
+
 }

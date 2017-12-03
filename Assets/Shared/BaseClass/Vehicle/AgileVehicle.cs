@@ -34,6 +34,18 @@ abstract public class AgileVehicle <V, S>: Vehicle
 	[SerializeField]
 	public SteeringParams avoidingParams;
 
+	public float futureLookupTime = 1.8f;
+
+	/// <summary>
+	/// Gets the future position.
+	/// </summary>
+	/// <returns>The future position.</returns>
+	protected Vector3 GetFuturePosition ()
+	{
+		return transform.position + Velocity * futureLookupTime;
+	}
+
+
 	/// <summary>
 	/// Gets or sets the target obstacle system.
 	/// </summary>

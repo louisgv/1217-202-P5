@@ -8,7 +8,7 @@ using UnityEngine;
 /// Author: LAB
 /// Attached to: FlowFieldFollower
 /// </summary>
-public class FlowFieldCollider : CustomBoxCollider
+public class FlowFieldFollowerCollider : CustomBoxCollider
 {
 	
 }

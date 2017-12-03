@@ -8,6 +8,9 @@ using UnityEngine;
 /// </summary>
 public class FlowFieldGrid : MonoBehaviour
 {
+	public static bool debugLine = true;
+	public Material glLineMaterial;
+
 	/// <summary>
 	/// Gets or sets the flow direction.
 	/// </summary>
@@ -17,18 +20,42 @@ public class FlowFieldGrid : MonoBehaviour
 		set;
 	}
 
-	// Use this for initialization
 	/// <summary>
-	/// Raises the draw gizmos event.
+	/// Draws the debug line from transform' center.
 	/// </summary>
-	protected virtual void OnDrawGizmos ()
+	protected void DrawDebugLine (Vector3 start, Vector3 end, Color color)
 	{
-		//TODO: Comment these out in prod
-
-		Gizmos.color = Color.black;
-
-		Gizmos.DrawLine (
-			transform.position - FlowDirection / 2, 
-			transform.position + FlowDirection / 2);
+		if (!debugLine) {
+			return;
+		}
+		Debug.DrawLine (start, end, color);
+		GL.Begin (GL.LINES);
+		GL.Color (color);
+		GL.Vertex (start);
+		GL.Vertex (end);
+		GL.End ();
 	}
+
+	/// <summary>
+	/// Raises the render object extended event.
+	/// </summary>
+	protected virtual void DrawDebugLines ()
+	{
+		DrawDebugLine (transform.position, transform.position + FlowDirection, Color.black);
+	}
+
+	/// <summary>
+	/// Raises the render object event.
+	/// </summary>
+	protected void OnRenderObject ()
+	{
+		glLineMaterial.SetPass (0);
+
+		GL.PushMatrix ();
+
+		DrawDebugLines ();
+
+		GL.PopMatrix ();
+	}
+
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 /// <summary>
 /// Flocking vehicle.
-/// It is a smart vehicle that also know how to move together with
+/// It is an agile vehicle that also know how to move together with
 /// its flock mate in the same spawning system
 /// It's a boid
 /// Author: LAB

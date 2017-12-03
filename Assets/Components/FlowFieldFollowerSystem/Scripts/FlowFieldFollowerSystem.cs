@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Flow field follower.
-/// It construct the vector field, leveraging the grid we already implemented
+/// It constructs the vector field, leveraging the grid we already implemented
 /// Author: LAB
 /// Attached to: FlowFieldFollowerSystem
 /// </summary>
@@ -20,6 +20,8 @@ public class FlowFieldFollowerSystem : VehicleSpawningSystem<FlowFieldFollower>
 	}
 
 	public FlowFieldGrid flowGridPrefab;
+
+	private GameObject flowGridContainer;
 
 	#region implemented abstract members of SpawningSystem
 
@@ -40,6 +42,16 @@ public class FlowFieldFollowerSystem : VehicleSpawningSystem<FlowFieldFollower>
 		RegisterVehicle (flowFieldFollowerInstance);
 	}
 
+	/// <summary>
+	/// Spawns an entity.
+	/// </summary>
+	protected override void SpawnEntity ()
+	{
+		var spawnPos = plane.GetRandomPositionXZ ();
+
+		SpawnEntity (spawnPos);
+	}
+
 	#endregion
 
 
@@ -47,9 +59,13 @@ public class FlowFieldFollowerSystem : VehicleSpawningSystem<FlowFieldFollower>
 
 	protected override void Awake ()
 	{
-		base.Awake ();
+		flowGridContainer = new GameObject ("Flow Grid Container");
+
+		flowGridContainer.transform.SetParent (transform);
 
 		FlowFieldMap = new Dictionary<Vector3, FlowFieldGrid> ();
+
+		base.Awake ();
 
 		InitializeFlowFieldMap ();
 	}
@@ -74,10 +90,10 @@ public class FlowFieldFollowerSystem : VehicleSpawningSystem<FlowFieldFollower>
 			for (int z = (int)minBound.z; z <= (int)maxBound.z; z++) {
 				var gridPos = plane.WorldCenter + new Vector3 (x, 0, z);
 
-				var grid = Instantiate (flowGridPrefab, gridPos, Quaternion.identity, transform);
+				var grid = Instantiate (flowGridPrefab, gridPos, Quaternion.identity, flowGridContainer.transform);
 
 				grid.FlowDirection = new Vector3 (
-					Mathf.Cos (gridPos.magnitude) * gridPos.z, 0, 
+					Mathf.Cos (gridPos.magnitude / 9f) * gridPos.z, 0, 
 					gridPos.x).normalized;
 
 				FlowFieldMap.Add (gridPos, grid);
@@ -85,4 +101,9 @@ public class FlowFieldFollowerSystem : VehicleSpawningSystem<FlowFieldFollower>
 		}
 	}
 
+	protected override void Update ()
+	{
+		base.Update ();
+		RefreshFlockAverageVelocityMap ();
+	}
 }

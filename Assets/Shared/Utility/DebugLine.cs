@@ -11,8 +11,16 @@ public class DebugLine : MonoBehaviour
 	/// <summary>
 	/// Toggle the static debug value
 	/// </summary>
-	public void Toggle ()
+	public void ToggleVehicle ()
 	{
 		Vehicle.debugLine = !Vehicle.debugLine;
+	}
+
+	/// <summary>
+	/// Toggles the flow field state.
+	/// </summary>
+	public void ToggleFlowField ()
+	{
+		FlowFieldGrid.debugLine = !FlowFieldGrid.debugLine;
 	}
 }

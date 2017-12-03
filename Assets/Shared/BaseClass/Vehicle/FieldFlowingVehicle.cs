@@ -5,7 +5,7 @@ using System;
 
 /// <summary>
 /// Field flowing vehicle.
-/// A Smart vehicle that implement method to Follow the flow field 
+/// A flocking vehicle that implement method to Follow the flow field 
 /// defined by its parent system
 /// Author: LAB
 /// </summary>
@@ -17,8 +17,6 @@ abstract public class FieldFlowingVehicle <V, S>: FlockingVehicle<V, S>
 	[SerializeField]
 	public SteeringParams flowFieldParams;
 
-	public float futureLookupTime = 1.8f;
-
 	/// <summary>
 	/// Local reference to the flowfield map
 	/// </summary>
@@ -26,15 +24,6 @@ abstract public class FieldFlowingVehicle <V, S>: FlockingVehicle<V, S>
 	public Dictionary <Vector3, FlowFieldGrid> FlowFieldMap {
 		private get;
 		set;
-	}
-
-	/// <summary>
-	/// Gets the future position.
-	/// </summary>
-	/// <returns>The future position.</returns>
-	protected Vector3 GetFuturePosition ()
-	{
-		return transform.position + Velocity * futureLookupTime;
 	}
 
 	/// <summary>

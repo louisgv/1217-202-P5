@@ -129,7 +129,7 @@ public class CustomBoxCollider : MonoBehaviour
 	/// <param name="col">Col.</param>
 	public Vector3 GetSampledPosition (Vector3 pos, CustomBoxCollider col)
 	{
-		pos.y += size.y + col.Size.y / 2;
+		pos.y += col.Size.y / 2;
 		return pos;
 	}
 

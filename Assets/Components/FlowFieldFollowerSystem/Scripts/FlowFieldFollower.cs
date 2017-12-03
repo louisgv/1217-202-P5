@@ -26,6 +26,8 @@ public class FlowFieldFollower : FieldFlowingVehicle<FlowFieldFollower, FlowFiel
 
 		totalForce += SteeringForce.GetBoundingForce (this, BoundingPlane) * boundingParams.ForceScale;
 
+		totalForce += GetTotalNeighborAlignmentForce (ParentSystem.FlockAverageVelocityMap [GridCoordinate]) * alignParams.ForceScale;
+
 		totalForce.y = 0;
 
 		return Vector3.ClampMagnitude (totalForce, maxForce);
