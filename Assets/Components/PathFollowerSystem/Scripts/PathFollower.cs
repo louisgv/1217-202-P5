@@ -19,6 +19,9 @@ public class PathFollower : PathFollowingVehicle<PathFollower, PathFollowerSyste
 
 		totalForce += GetPathFollowForce () * pathFollowParams.ForceScale;
 
+		// Addng a dash of wandering force so that if it get stuck, it will move away
+		totalForce += SteeringForce.GetWanderingForce (this) * wanderingParams.ForceScale;
+
 		totalForce += GetTotalNeighborSeparationForce () * separationParams.ForceScale;
 
 		totalForce += SteeringForce.GetBoundingForce (this, BoundingPlane) * boundingParams.ForceScale;
