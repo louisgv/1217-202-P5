@@ -4,6 +4,9 @@ using UnityEngine;
 
 /// <summary>
 /// Path node.
+/// Has some helper static method used to check normal boundary
+/// Author: LAB
+/// Attached to: PathNode
 /// </summary>
 public class PathNode : MonoBehaviour
 {

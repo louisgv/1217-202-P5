@@ -4,10 +4,17 @@ using UnityEngine;
 
 /// <summary>
 /// Debug line.
-/// A wrapper to toggle the debug line
+/// A wrapper to toggle the debug line 
+/// as well as toggle the state of some 
+/// game object
+/// Attached to: Most buttons in the HUD
+/// Author: LAB
 /// </summary>
 public class DebugLine : MonoBehaviour
 {
+	
+	public GameObject target;
+
 	/// <summary>
 	/// Toggle the static debug value
 	/// </summary>
@@ -22,5 +29,13 @@ public class DebugLine : MonoBehaviour
 	public void ToggleFlowField ()
 	{
 		FlowFieldGrid.debugLine = !FlowFieldGrid.debugLine;
+	}
+
+	/// <summary>
+	/// Toggles the target active state.
+	/// </summary>
+	public void ToggleTarget ()
+	{
+		target.SetActive (!target.activeSelf);
 	}
 }

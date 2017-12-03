@@ -6,6 +6,7 @@ using UnityEngine;
 /// Path following vehicle.
 /// A flocking vehicle that implement method to Follow the Path
 /// defined by its parent system
+/// Author: LAB
 /// </summary>
 abstract public class PathFollowingVehicle <V, S>: FlockingVehicle<V, S> 
 	where V : Vehicle

@@ -4,6 +4,9 @@ using UnityEngine;
 
 /// <summary>
 /// Path follower.
+/// Following the path defined by its parent system
+/// Author: LAB
+/// Attached to: PathFollower
 /// </summary>
 public class PathFollower : PathFollowingVehicle<PathFollower, PathFollowerSystem>
 {
