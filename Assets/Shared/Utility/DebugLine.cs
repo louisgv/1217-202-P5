@@ -38,4 +38,12 @@ public class DebugLine : MonoBehaviour
 	{
 		target.SetActive (!target.activeSelf);
 	}
+
+	/// <summary>
+	/// Toggles the resistance area debug.
+	/// </summary>
+	public void ToggleResistanceArea ()
+	{
+		ResistanceArea.debugLine = !ResistanceArea.debugLine;
+	}
 }
