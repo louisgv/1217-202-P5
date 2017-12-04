@@ -12,6 +12,10 @@ using UnityEngine;
 /// </summary>
 public class PathFollowerSystem : VehicleSpawningSystem<PathFollower>
 {
+	public static bool debugLine;
+	
+	public Material glLineMaterial;
+
 	public Transform path;
 
 	public Transform puddles;
@@ -68,4 +72,30 @@ public class PathFollowerSystem : VehicleSpawningSystem<PathFollower>
 		base.Awake ();
 	}
 
+
+	/// <summary>
+	/// Raises the render object event.
+	/// </summary>
+	protected void OnRenderObject ()
+	{
+		if (!debugLine) {
+			return;
+		}
+
+		glLineMaterial.SetPass (0);
+
+		GL.PushMatrix ();
+
+		GL.Begin (GL.LINES);
+		GL.Color (Color.black);
+
+		for (int i = 0; i < path.childCount; i++) {
+			GL.Vertex (path.GetChild (i).position);
+			GL.Vertex (path.GetChild ((i + 1) % path.childCount).position);
+		}
+
+		GL.End ();
+
+		GL.PopMatrix ();
+	}
 }

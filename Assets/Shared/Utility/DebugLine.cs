@@ -46,4 +46,12 @@ public class DebugLine : MonoBehaviour
 	{
 		ResistanceArea.debugLine = !ResistanceArea.debugLine;
 	}
+
+	/// <summary>
+	/// Toggles the resistance area debug.
+	/// </summary>
+	public void TogglePath ()
+	{
+		PathFollowerSystem.debugLine = !PathFollowerSystem.debugLine;
+	}
 }
