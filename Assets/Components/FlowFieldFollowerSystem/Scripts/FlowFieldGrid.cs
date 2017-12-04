@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class FlowFieldGrid : MonoBehaviour
 {
-	public static bool debugLine = true;
+	public static bool debugLine = false;
 	public Material glLineMaterial;
 
 	/// <summary>

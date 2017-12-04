@@ -11,7 +11,7 @@ using System;
 /// </summary>
 public abstract class Vehicle : SpawningGridComponent
 {
-	public static bool debugLine = true;
+	public static bool debugLine = false;
 
 	public Material glLineMaterial;
 	
