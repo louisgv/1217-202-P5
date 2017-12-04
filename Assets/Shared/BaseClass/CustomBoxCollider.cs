@@ -6,6 +6,8 @@ using UnityEngine;
 /// Custom box collider.
 /// It uttilizes AABB collision algorithm to check for collision
 /// It is also used to calculate the square extend of an obstacle
+/// Author: LAB
+/// Attached to: FlockerSystem, FlowFieldFollowerSystem, PathFollowerSystem
 /// </summary>
 public class CustomBoxCollider : MonoBehaviour
 {

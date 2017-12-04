@@ -5,6 +5,8 @@ using UnityEngine;
 /// <summary>
 /// Flow field grid.
 /// Mainly used to visualize the flow field
+/// Author: LAB
+/// Attached to: FlowFieldGrid
 /// </summary>
 public class FlowFieldGrid : MonoBehaviour
 {
