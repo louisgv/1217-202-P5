@@ -13,10 +13,15 @@ using UnityEngine;
 public class PathFollowerSystem : VehicleSpawningSystem<PathFollower>
 {
 	public Transform path;
-	
+
+	public Transform puddles;
+
 	public float pathRadiusSquared;
 
 	private List<PathNode> nodes;
+
+	private List<ResistanceArea> resistanceAreas;
+
 
 	#region implemented abstract members of SpawningSystem
 
@@ -36,6 +41,8 @@ public class PathFollowerSystem : VehicleSpawningSystem<PathFollower>
 
 		pathFollowerInstance.PathRadiusSquared = pathRadiusSquared;
 
+		pathFollowerInstance.ResistanceAreas = resistanceAreas;
+
 		RegisterVehicle (pathFollowerInstance);
 	}
 
@@ -48,8 +55,14 @@ public class PathFollowerSystem : VehicleSpawningSystem<PathFollower>
 	{
 		nodes = new List<PathNode> ();
 
+		resistanceAreas = new List<ResistanceArea> ();
+
 		foreach (Transform node in path) {
 			nodes.Add (node.GetComponent<PathNode> ());
+		}
+
+		foreach (Transform puddle in puddles) {
+			resistanceAreas.Add (puddle.GetComponent <ResistanceArea> ());
 		}
 
 		base.Awake ();

@@ -57,6 +57,9 @@ public class FlowFieldFollowerSystem : VehicleSpawningSystem<FlowFieldFollower>
 
 	#region Unity Lifecycle
 
+	/// <summary>
+	/// Initialize the flow grid
+	/// </summary>
 	protected override void Awake ()
 	{
 		flowGridContainer = new GameObject ("Flow Grid Container");

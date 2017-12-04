@@ -10,6 +10,15 @@ using UnityEngine;
 /// </summary>
 public class PathFollower : PathFollowingVehicle<PathFollower, PathFollowerSystem>
 {
+	/// <summary>
+	/// Local reference of the resistance area. Unique to this 
+	/// group only
+	/// </summary>
+	/// <value>The resistance areas.</value>
+	public List<ResistanceArea> ResistanceAreas {
+		get;
+		set;
+	}
 
 	#region implemented abstract members of Vehicle
 
@@ -36,5 +45,40 @@ public class PathFollower : PathFollowingVehicle<PathFollower, PathFollowerSyste
 	}
 
 	#endregion
+
+	#region Unity Lifecycle
+
+	protected override void Update ()
+	{
+		ApplyDragForce ();
+
+		base.Update ();
+	}
+
+
+	#endregion
+
+	/// <summary>
+	/// Checks if is inside any of the resistance area and apply drag
+	/// accordingly.
+	/// </summary>
+	private void ApplyDragForce ()
+	{
+		foreach (var resistanceArea in ResistanceAreas) {
+			if (resistanceArea.IsCollidingWith (ColliderInstance)) {
+				ApplyDragForce (resistanceArea);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Applies the drag force.
+	/// </summary>
+	private void ApplyDragForce (ResistanceArea resistanceArea)
+	{
+		var dragMagnitude = resistanceArea.dragCoefficient * Velocity.sqrMagnitude;
+
+		ApplyForce (-Velocity.normalized * dragMagnitude);
+	}
 
 }
